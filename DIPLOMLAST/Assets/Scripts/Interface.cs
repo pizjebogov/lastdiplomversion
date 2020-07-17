@@ -9,7 +9,7 @@ public class Interface : MonoBehaviour
     public GameManager gm;
     public Material normal, glowing, glowingday, glowingnight, daytheme, nighttheme;
     public string theme;
-    public GameObject MedicalBed, InfoOptionsPanel, AllOptions,InfoModeText,DateTimePanel,QuitOptPanel,PoseWavePanel,MotionPanel ;
+    public GameObject MedicalBed, InfoOptionsPanel, AllOptions,InfoModeText,DateTimePanel,QuitOptPanel,PoseWavePanel,MotionPanel,StartStopPanel ;
     public Sprite suntheme, moontheme;
     public GameObject block;
     public Sprite blocked, unblocked;
@@ -38,7 +38,9 @@ public class Interface : MonoBehaviour
         PoseWavePanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(PoseWavePanel).x / 6, Param(PoseWavePanel).y);
         Calibrate(MotionPanel, Screen.width / 6, Screen.height / 2, -Screen.width / 12, 0);
         MotionPanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(MotionPanel).x / 1.5f, Param(PoseWavePanel).y/3);
-        
+        Calibrate(StartStopPanel, Screen.width / 4, Screen.height / 2, Screen.width / 8, 0);
+        StartStopPanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(StartStopPanel).x / 2, Param(StartStopPanel).y / 2);
+
     }
 
     // Update is called once per frame
@@ -260,6 +262,7 @@ public class Interface : MonoBehaviour
 
         if(gm.mode=="HeadMode"|| gm.mode == "BodyMode"|| gm.mode == "LegMode"|| gm.mode == "SpineMode")
         {
+            StartStopPanel.SetActive(false);
             PoseWavePanel.SetActive(false);
             if (gm.mode == "HeadMode") 
             {
@@ -302,6 +305,7 @@ public class Interface : MonoBehaviour
         }
         else if(gm.mode=="GoingZeroMode"|| gm.mode == "ChairPose" || gm.mode == "ChairModifiedPose" || gm.mode == "DinnerPose" || gm.mode == "Verticalize" || gm.mode == "Mode5" || gm.mode == "ProgramWave")
         {
+            StartStopPanel.SetActive(true);
             PoseWavePanel.SetActive(false);
             MotionPanel.SetActive(false);
             if (gm.mode == "GoingZeroMode")
@@ -328,6 +332,7 @@ public class Interface : MonoBehaviour
         else
         {
             MotionPanel.SetActive(false);
+            StartStopPanel.SetActive(false);
             if (gm.mode == "ProgramMode")
             {
                 text.text = "Select Position";
