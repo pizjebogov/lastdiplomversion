@@ -16,7 +16,7 @@ public class Interface : MonoBehaviour
     public bool TimeSettedManually = false;
     public Slider Batteryslide;
     public GameObject modepanel;
-    
+    public Button[] MotionButtons = new Button[3];
     void Start()
     {
         Calibrate(InfoOptionsPanel, Screen.width, Screen.height / 8, 0, -Screen.height / 16);
@@ -35,6 +35,7 @@ public class Interface : MonoBehaviour
         Calibrate(PoseWavePanel, Screen.width * 2, Screen.height / 2, 0, 0);
         PoseWavePanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(PoseWavePanel).x / 6, Param(PoseWavePanel).y);
         Calibrate(MotionPanel, Screen.width / 6, Screen.height / 2, -Screen.width / 12, 0);
+        MotionPanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(MotionPanel).x / 1.5f, Param(PoseWavePanel).y/3);
     }
 
     // Update is called once per frame
@@ -45,6 +46,7 @@ public class Interface : MonoBehaviour
         checkblocking();
         CheckTime();
         CheckBattery();
+        checkupdown();
     }
     public void Calibrate(GameObject objectforcalib, float width,float height,float posx,float posy)
     {
@@ -184,7 +186,15 @@ public class Interface : MonoBehaviour
     }
     public void OpenClose(GameObject neededpanel)
     {
-        
+        if(neededpanel==AllOptions && PoseWavePanel.active == true)
+        {
+          //  gm.mode = null;
+            PoseWavePanel.SetActive(false);
+        }
+        else if (neededpanel == PoseWavePanel && AllOptions.active == true)
+        {
+            AllOptions.SetActive(false);
+        }
         neededpanel.SetActive(!neededpanel.activeSelf);
     }
     public void CheckTime()
@@ -223,4 +233,22 @@ public class Interface : MonoBehaviour
             Batteryslide.transform.Find("Fill Area/Fill").GetComponent<Image>().color = Color.green;
         }
     }
+
+    public void checkupdown()
+    {
+        if (gm.up)
+        {
+            MotionButtons[0].GetComponent<Image>().color = Color.green;
+        }
+        else if (gm.down)
+        {
+            MotionButtons[2].GetComponent<Image>().color = Color.red;
+        }
+        else
+        {
+            MotionButtons[0].GetComponent<Image>().color = Color.white;
+            MotionButtons[2].GetComponent<Image>().color = Color.white;
+        }
+    }
+
 }

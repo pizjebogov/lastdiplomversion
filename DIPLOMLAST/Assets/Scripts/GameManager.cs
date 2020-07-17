@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public GameObject head, body, legs, spine,upperpart;
     public string mode, state, pose;
     public bool blockedhead, blockedbody, blockedspine;
-
+    public bool up, down;
     void Start()
     {
         
