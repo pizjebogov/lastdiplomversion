@@ -17,6 +17,8 @@ public class Interface : MonoBehaviour
     public Slider Batteryslide;
     public GameObject modepanel;
     public Button[] MotionButtons = new Button[3];
+    public Button[] ModeButtons = new Button[6];
+    
     void Start()
     {
         Calibrate(InfoOptionsPanel, Screen.width, Screen.height / 8, 0, -Screen.height / 16);
@@ -36,6 +38,7 @@ public class Interface : MonoBehaviour
         PoseWavePanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(PoseWavePanel).x / 6, Param(PoseWavePanel).y);
         Calibrate(MotionPanel, Screen.width / 6, Screen.height / 2, -Screen.width / 12, 0);
         MotionPanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(MotionPanel).x / 1.5f, Param(PoseWavePanel).y/3);
+        
     }
 
     // Update is called once per frame
@@ -47,6 +50,7 @@ public class Interface : MonoBehaviour
         CheckTime();
         CheckBattery();
         checkupdown();
+        checktextinfo();
     }
     public void Calibrate(GameObject objectforcalib, float width,float height,float posx,float posy)
     {
@@ -248,6 +252,102 @@ public class Interface : MonoBehaviour
         {
             MotionButtons[0].GetComponent<Image>().color = Color.white;
             MotionButtons[2].GetComponent<Image>().color = Color.white;
+        }
+    }
+    public void checktextinfo()
+    {
+        Text text = InfoModeText.GetComponent<Text>();
+
+        if(gm.mode=="HeadMode"|| gm.mode == "BodyMode"|| gm.mode == "LegMode"|| gm.mode == "SpineMode")
+        {
+            PoseWavePanel.SetActive(false);
+            if (gm.mode == "HeadMode") 
+            {
+                text.text = "Position: Head\tAngle: " + gm.headangle;
+                for(int i = 0; i < 6; i++)
+                {
+                    ModeButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                    ModeButtons[0].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                }
+                MotionPanel.SetActive(true);
+            }
+            else if (gm.mode == "BodyMode") {
+                text.text = "Position: Body\tAngle: " + gm.bodyangle;
+                for (int i = 0; i < 6; i++)
+                {
+                    ModeButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                    ModeButtons[1].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    MotionPanel.SetActive(true);
+                }
+            }
+            else if (gm.mode == "LegMode") {
+                text.text = "Position: Leg \t Angle: " + gm.legangle;
+                for (int i = 0; i < 6; i++)
+                {
+                    ModeButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                    ModeButtons[2].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    MotionPanel.SetActive(true);
+                }
+            }
+            else if (gm.mode == "SpineMode") 
+            {
+                text.text = "Position: Spine\tAngle: " + gm.spineangle;
+                for (int i = 0; i < 6; i++)
+                {
+                    ModeButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                    ModeButtons[3].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    MotionPanel.SetActive(true);
+                }
+            }
+        }
+        else if(gm.mode=="GoingZeroMode"|| gm.mode == "ChairPose" || gm.mode == "ChairModifiedPose" || gm.mode == "DinnerPose" || gm.mode == "Verticalize" || gm.mode == "Mode5" || gm.mode == "ProgramWave")
+        {
+            PoseWavePanel.SetActive(false);
+            MotionPanel.SetActive(false);
+            if (gm.mode == "GoingZeroMode")
+            {
+                text.text = "Calibrating to Zero\t" + ((gm.pose==null|gm.pose=="")?null:("Pose:" + gm.pose)) ;
+                for (int i = 0; i < 6; i++)
+                {
+                    ModeButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                    ModeButtons[4].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    
+                }
+            }
+            else
+            {
+                text.text = "Calibrating to Position" + gm.mode+ "\t" + ((gm.pose == null | gm.pose == "") ? null : ("Pose:" + gm.pose));
+                for (int i = 0; i < 6; i++)
+                {
+                    ModeButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                    ModeButtons[4].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+
+                }
+            }
+        }
+        else
+        {
+            MotionPanel.SetActive(false);
+            if (gm.mode == "ProgramMode")
+            {
+                text.text = "Select Position";
+                for (int i = 0; i < 6; i++)
+                {
+                    ModeButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                    ModeButtons[5].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+
+                }
+            }
+            else
+            {
+                PoseWavePanel.SetActive(false);
+                text.text = "Select Program";
+                for (int i = 0; i < 6; i++)
+                {
+                    ModeButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+
+                }
+            }
         }
     }
 

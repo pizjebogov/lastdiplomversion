@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
     public string mode, state, pose;
     public bool blockedhead, blockedbody, blockedspine;
     public bool up, down;
+    public float headangle, bodyangle, legangle, spineangle;
     void Start()
     {
         
@@ -16,7 +18,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        headangle=Convert.ToSingle(Math.Round(head.transform.eulerAngles.z > 180 ? -(head.transform.eulerAngles.z - 360) : -head.transform.eulerAngles.z,0));
+        bodyangle= Convert.ToSingle(Math.Round(body.transform.eulerAngles.z > 180 ? (body.transform.eulerAngles.z - 360) : body.transform.eulerAngles.z, 0));
+        legangle=Convert.ToSingle(Math.Round(legs.transform.eulerAngles.z > 180 ? (legs.transform.eulerAngles.z - 360) : legs.transform.eulerAngles.z, 0));
+        spineangle = Convert.ToSingle(Math.Round(spine.transform.eulerAngles.z > 180 ? -(spine.transform.eulerAngles.z - 360) : -spine.transform.eulerAngles.z, 0));
     }
     public void blocksomething(string something)
     {
