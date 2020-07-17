@@ -9,12 +9,14 @@ public class Interface : MonoBehaviour
     public GameManager gm;
     public Material normal, glowing, glowingday, glowingnight, daytheme, nighttheme;
     public string theme;
-    public GameObject MedicalBed, InfoOptionsPanel, AllOptions,InfoModeText,DateTimePanel,QuitOptPanel ;
+    public GameObject MedicalBed, InfoOptionsPanel, AllOptions,InfoModeText,DateTimePanel,QuitOptPanel,PoseWavePanel,MotionPanel ;
     public Sprite suntheme, moontheme;
     public GameObject block;
     public Sprite blocked, unblocked;
     public bool TimeSettedManually = false;
     public Slider Batteryslide;
+    public GameObject modepanel;
+    
     void Start()
     {
         Calibrate(InfoOptionsPanel, Screen.width, Screen.height / 8, 0, -Screen.height / 16);
@@ -28,6 +30,11 @@ public class Interface : MonoBehaviour
         Calibrate(QuitOptPanel, Param(InfoOptionsPanel).x * 0.2f, Param(InfoOptionsPanel).y, -Param(InfoOptionsPanel).x * 0.1f, 0);
         DateTimePanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(DateTimePanel).x / 2, Param(DateTimePanel).y);
         QuitOptPanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(QuitOptPanel).x / 4, Param(QuitOptPanel).y/2);
+        Calibrate(modepanel, Screen.width, Screen.height / 6.5f, 0, Screen.height / 13);
+        modepanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(modepanel).x / 6, Param(modepanel).y);
+        Calibrate(PoseWavePanel, Screen.width * 2, Screen.height / 2, 0, 0);
+        PoseWavePanel.transform.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(PoseWavePanel).x / 6, Param(PoseWavePanel).y);
+        Calibrate(MotionPanel, Screen.width / 6, Screen.height / 2, -Screen.width / 12, 0);
     }
 
     // Update is called once per frame
@@ -37,6 +44,7 @@ public class Interface : MonoBehaviour
         checkmaterials();
         checkblocking();
         CheckTime();
+        CheckBattery();
     }
     public void Calibrate(GameObject objectforcalib, float width,float height,float posx,float posy)
     {
@@ -176,6 +184,7 @@ public class Interface : MonoBehaviour
     }
     public void OpenClose(GameObject neededpanel)
     {
+        
         neededpanel.SetActive(!neededpanel.activeSelf);
     }
     public void CheckTime()

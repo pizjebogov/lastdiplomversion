@@ -89,4 +89,15 @@ public class GameManager : MonoBehaviour
         cj.angularZMotion = ConfigurableJointMotion.Locked;
 
     }
+    public void switchmode(string whatmode)
+    {
+        if (whatmode == mode)
+        {
+            mode = null;
+        }
+        else
+        {
+            mode = whatmode;
+        }
+    }
 }
