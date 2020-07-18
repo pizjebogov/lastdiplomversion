@@ -7,6 +7,11 @@ public class GameManager : MonoBehaviour
 {
     public GameObject head, body, legs, spine,upperpart;
     public string mode, state, pose;
+    /*
+     mode: HeadMode,BodyMode,LegMode, SpineMode, GoingZeroMode,ProgramWave  mb ChairPose,ChairModifiedPose,DinnerPose,Verticalize, Mode5
+     state: Calibrating,Options,Quit,SwitchingPose
+     pose: Head,Body,Leg,Spine
+     */
     public bool blockedhead, blockedbody, blockedspine;
     public bool up, down;
     public float headangle, bodyangle, legangle, spineangle;
@@ -103,6 +108,17 @@ public class GameManager : MonoBehaviour
         else
         {
             mode = whatmode;
+        }
+    }
+    public void switchtostate(string whatstate)
+    {
+        if (whatstate == state)
+        {
+            state = null;
+        }
+        else
+        {
+            state = whatstate;
         }
     }
 }
