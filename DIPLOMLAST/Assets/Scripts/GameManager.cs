@@ -15,9 +15,11 @@ public class GameManager : MonoBehaviour
     public bool blockedhead, blockedbody, blockedspine;
     public bool up, down;
     public float headangle, bodyangle, legangle, spineangle;
+    public float rotationspeed;
+    public GameObject anchorheadbody, anchorbodylegs;
     void Start()
     {
-        
+        rotationspeed = 10;
     }
 
     // Update is called once per frame
@@ -27,6 +29,16 @@ public class GameManager : MonoBehaviour
         bodyangle= Convert.ToSingle(Math.Round(body.transform.eulerAngles.z > 180 ? (body.transform.eulerAngles.z - 360) : body.transform.eulerAngles.z, 0));
         legangle=Convert.ToSingle(Math.Round(legs.transform.eulerAngles.z > 180 ? (legs.transform.eulerAngles.z - 360) : legs.transform.eulerAngles.z, 0));
         spineangle = Convert.ToSingle(Math.Round(spine.transform.eulerAngles.z > 180 ? -(spine.transform.eulerAngles.z - 360) : -spine.transform.eulerAngles.z, 0));
+
+        if (Input.GetMouseButton(0) && (up || down))
+        {
+            updownrotate();
+        }
+        else if (Input.GetMouseButtonUp(0) && (up || down))
+        {
+            up = false;
+            down = false;
+        }
     }
     public void blocksomething(string something)
     {
@@ -119,6 +131,61 @@ public class GameManager : MonoBehaviour
         else
         {
             state = whatstate;
+        }
+    }
+    public void switchupdown(string upordown)
+    {
+        if (upordown == "Up")
+        {
+            up = true;
+            down = false;
+        }
+        else if (upordown == "Down")
+        {
+            up = false;
+            down = true;
+        }
+    }
+
+    public void updownrotate()
+    {
+        if (up)
+        {
+            switch (mode)
+            {
+                case ("HeadMode"):
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed * Time.deltaTime);
+                    break;
+                case ("BodyMode"):
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed * Time.deltaTime);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, 2* rotationspeed * Time.deltaTime);
+                    break;
+                case ("LegMode"):
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed * Time.deltaTime);
+                    break;
+                case ("SpineMode"):
+                    spine.transform.Rotate(Vector3.back, rotationspeed * Time.deltaTime);
+                    break;
+            }
+        }
+        else if (down)
+        {
+            switch (mode)
+            {
+                case ("HeadMode"):
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed * Time.deltaTime);
+                    break;
+                case ("BodyMode"):
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed * Time.deltaTime);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, 2*rotationspeed * Time.deltaTime);
+                    break;
+                case ("LegMode"):
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed * Time.deltaTime);
+                    break;
+                case ("SpineMode"):
+                    spine.transform.Rotate(Vector3.forward, rotationspeed * Time.deltaTime);
+                    break;
+            }
         }
     }
 }
