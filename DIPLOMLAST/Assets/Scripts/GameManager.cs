@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,12 +15,16 @@ public class GameManager : MonoBehaviour
      */
     public bool blockedhead, blockedbody, blockedspine;
     public bool up, down;
-    public float headangle, bodyangle, legangle, spineangle;
+    public float headangle, bodyangle, legangle, spineangle,localheadangle,localbodyangle,locallegangle,localspineangle;
     public float rotationspeed;
     public GameObject anchorheadbody, anchorbodylegs;
+    public float AngularHeadLimit, AngularBodyLimit, AngularSpineLimit;
     void Start()
     {
         rotationspeed = 10;
+        AngularHeadLimit = 20;
+        AngularSpineLimit = 45;
+        AngularBodyLimit = 50;
     }
 
     // Update is called once per frame
@@ -29,7 +34,10 @@ public class GameManager : MonoBehaviour
         bodyangle= Convert.ToSingle(Math.Round(body.transform.eulerAngles.z > 180 ? (body.transform.eulerAngles.z - 360) : body.transform.eulerAngles.z, 0));
         legangle=Convert.ToSingle(Math.Round(legs.transform.eulerAngles.z > 180 ? (legs.transform.eulerAngles.z - 360) : legs.transform.eulerAngles.z, 0));
         spineangle = Convert.ToSingle(Math.Round(spine.transform.eulerAngles.z > 180 ? -(spine.transform.eulerAngles.z - 360) : -spine.transform.eulerAngles.z, 0));
-
+        localheadangle = Convert.ToSingle(Math.Round(head.transform.localEulerAngles.z > 180 ? -(head.transform.localEulerAngles.z - 360) : -head.transform.localEulerAngles.z, 0));
+        localbodyangle = Convert.ToSingle(Math.Round(body.transform.localEulerAngles.z > 180 ? (body.transform.localEulerAngles.z - 360) : body.transform.localEulerAngles.z, 0));
+        locallegangle = Convert.ToSingle(Math.Round(legs.transform.localEulerAngles.z > 180 ? (legs.transform.localEulerAngles.z - 360) : legs.transform.localEulerAngles.z, 0));
+        localspineangle = Convert.ToSingle(Math.Round(spine.transform.localEulerAngles.z > 180 ? -(spine.transform.localEulerAngles.z - 360) : -spine.transform.localEulerAngles.z, 0));
         if (Input.GetMouseButton(0) && (up || down))
         {
             updownrotate();
@@ -39,6 +47,7 @@ public class GameManager : MonoBehaviour
             up = false;
             down = false;
         }
+
     }
     public void blocksomething(string something)
     {
@@ -149,6 +158,8 @@ public class GameManager : MonoBehaviour
 
     public void updownrotate()
     {
+        float newangle;
+        float rotatedegrees = (rotationspeed * Time.deltaTime);
         if (up)
         {
             switch (mode)
@@ -161,10 +172,15 @@ public class GameManager : MonoBehaviour
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, 2* rotationspeed * Time.deltaTime);
                     break;
                 case ("LegMode"):
-                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed * Time.deltaTime);
+                    
+                    newangle = Mathf.Clamp(locallegangle + rotatedegrees, -10, 10);
+                    rotatedegrees = newangle - locallegangle;
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotatedegrees);
                     break;
                 case ("SpineMode"):
-                    spine.transform.Rotate(Vector3.back, rotationspeed * Time.deltaTime);
+                    newangle = Mathf.Clamp(spineangle + rotatedegrees, -AngularSpineLimit, AngularSpineLimit);
+                    rotatedegrees = newangle - spineangle;
+                    spine.transform.Rotate(Vector3.back, rotatedegrees);
                     break;
             }
         }
@@ -180,10 +196,14 @@ public class GameManager : MonoBehaviour
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, 2*rotationspeed * Time.deltaTime);
                     break;
                 case ("LegMode"):
-                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed * Time.deltaTime);
+                    newangle = Mathf.Clamp((locallegangle - rotatedegrees), -10, 10);
+                    rotatedegrees = Mathf.Abs(newangle -locallegangle);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotatedegrees);
                     break;
                 case ("SpineMode"):
-                    spine.transform.Rotate(Vector3.forward, rotationspeed * Time.deltaTime);
+                    newangle = Mathf.Clamp(spineangle + rotatedegrees, -AngularSpineLimit, AngularSpineLimit);
+                    rotatedegrees = newangle - spineangle;
+                    spine.transform.Rotate(Vector3.forward, rotatedegrees);
                     break;
             }
         }
