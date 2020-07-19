@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotatedegrees);
                     break;
                 case ("SpineMode"):
-                    newangle = Mathf.Clamp(spineangle + rotatedegrees, -AngularSpineLimit, AngularSpineLimit);
+                    newangle = Mathf.Clamp((spineangle + rotatedegrees), -AngularSpineLimit, AngularSpineLimit);
                     rotatedegrees = newangle - spineangle;
                     spine.transform.Rotate(Vector3.back, rotatedegrees);
                     break;
@@ -201,8 +201,8 @@ public class GameManager : MonoBehaviour
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotatedegrees);
                     break;
                 case ("SpineMode"):
-                    newangle = Mathf.Clamp(spineangle + rotatedegrees, -AngularSpineLimit, AngularSpineLimit);
-                    rotatedegrees = newangle - spineangle;
+                    newangle = Mathf.Clamp(spineangle - rotatedegrees, -AngularSpineLimit, AngularSpineLimit);
+                    rotatedegrees = spineangle-newangle;
                     spine.transform.Rotate(Vector3.forward, rotatedegrees);
                     break;
             }
