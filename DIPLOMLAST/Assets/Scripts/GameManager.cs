@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotatedegrees);
                     break;
                 case ("SpineMode"):
-                    newangle = Mathf.Clamp((spineangle + rotatedegrees), -AngularSpineLimit, AngularSpineLimit);
+                    newangle = Mathf.Clamp((spineangle + rotatedegrees), -15, AngularSpineLimit);
                     rotatedegrees = newangle - spineangle;
                     spine.transform.Rotate(Vector3.back, rotatedegrees);
                     break;
@@ -203,7 +203,7 @@ public class GameManager : MonoBehaviour
                     newangle = Mathf.Clamp(localbodyangle - rotatedegrees, 0, AngularBodyLimit);
                     rotatedegrees =Mathf.Abs(localbodyangle - newangle);
                     body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotatedegrees);
-                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, 2f * rotatedegrees);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, 1.95f * rotatedegrees);
                     }
                     else {Interface.InfoModeText.GetComponent<Text>().text="You should calibrate legs to " + localbodyangle*-2 + " degrees" ; }
                     
@@ -214,7 +214,7 @@ public class GameManager : MonoBehaviour
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotatedegrees);
                     break;
                 case ("SpineMode"):
-                    newangle = Mathf.Clamp(spineangle - rotatedegrees, -AngularSpineLimit, AngularSpineLimit);
+                    newangle = Mathf.Clamp(spineangle - rotatedegrees, -15, AngularSpineLimit);
                     rotatedegrees = spineangle-newangle;
                     spine.transform.Rotate(Vector3.forward, rotatedegrees);
                     break;

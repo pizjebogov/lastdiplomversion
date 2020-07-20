@@ -85,7 +85,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_D895ACBB: {r: 0.023529412, g: 0, b: 1.945098, a: 0}
+    - Color_D895ACBB: {r: 1.1269387, g: 0.25796995, b: 0.037210263, a: 0}
     - Color_E1857CCA: {r: 0.10294118, g: 0.10294118, b: 0.24509804, a: 0}
     - Vector4_2B152026: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

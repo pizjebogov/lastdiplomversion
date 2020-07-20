@@ -24,6 +24,7 @@ public class Interface : MonoBehaviour
     public GameObject[] anglebuttons = new GameObject[5];
     public DateTime dt;
     public GameObject InputTimeDate;
+    public Text[] timedateinputs = new Text[6];
     void Start()
     {
         Calibrate(InfoOptionsPanel, Screen.width, Screen.height / 8, 0, -Screen.height / 16);
@@ -224,10 +225,25 @@ public class Interface : MonoBehaviour
     }
     public void CheckTime()
     {
-        if (!TimeSettedManually)
+        
+        if(Application.internetReachability != NetworkReachability.NotReachable)
         {
+            TimeSettedManually = false;
             DateTimePanel.transform.Find("TimeText").GetComponent<Text>().text = DateTime.Now.ToString("HH:mm");
             DateTimePanel.transform.Find("DateText").GetComponent<Text>().text = DateTime.Now.ToString("dd:MM:yyyy");
+        }
+        else
+        {
+            if (!TimeSettedManually)
+            {
+                DateTimePanel.transform.Find("TimeText").GetComponent<Text>().text = ("Set Date Manually");
+                DateTimePanel.transform.Find("DateText").GetComponent<Text>().text = ("Set Time Manually");
+            }
+            else
+            {
+                DateTimePanel.transform.Find("TimeText").GetComponent<Text>().text = dt.ToString("HH:mm");
+                DateTimePanel.transform.Find("DateText").GetComponent<Text>().text = dt.ToString("dd:MM:yyyy");
+            }
         }
     }
     public void CheckBattery()
@@ -334,6 +350,7 @@ public class Interface : MonoBehaviour
                         mode.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
                         ModeButtons[2].GetComponent<Image>().color = new Color(1, 1, 1, 1);
                     }
+                    anglepanel.SetActive(false);
                 }
                 else if (gm.mode == "SpineMode")
                 {
@@ -529,7 +546,7 @@ public class Interface : MonoBehaviour
         {
             gm.AngularSpineLimit = spineslider.value;
         }
-        else
+        else 
         {
             spineslider.value = gm.AngularSpineLimit;
         }
@@ -546,5 +563,11 @@ public class Interface : MonoBehaviour
             dt += new TimeSpan(0, 0, 1);
             yield return new WaitForSecondsRealtime(1);
         }
+    }
+
+    public void settime()
+    {
+        dt = new DateTime(Convert.ToInt32(timedateinputs[2].text), Convert.ToInt32(timedateinputs[1].text), Convert.ToInt32(timedateinputs[0].text), Convert.ToInt32(timedateinputs[3].text), Convert.ToInt32(timedateinputs[4].text), Convert.ToInt32(timedateinputs[5].text));
+        TimeSettedManually = true;
     }
 }
