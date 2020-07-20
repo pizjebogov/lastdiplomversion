@@ -22,7 +22,8 @@ public class Interface : MonoBehaviour
     public Vector3 beginpoint, endpoint, touchdirection;
     public GameObject anglepanel, anglevector;
     public GameObject[] anglebuttons = new GameObject[5];
-    
+    public DateTime dt;
+    public GameObject InputTimeDate;
     void Start()
     {
         Calibrate(InfoOptionsPanel, Screen.width, Screen.height / 8, 0, -Screen.height / 16);
@@ -53,6 +54,10 @@ public class Interface : MonoBehaviour
             anglebuttons[i].GetComponent<LineRenderer>().SetPosition(0, anglebuttons[i].transform.position);
             anglebuttons[i].GetComponent<LineRenderer>().SetPosition(1, anglevector.transform.position);
         }
+        AllOptions.transform.Find("MaxAngle").GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(AllOptions).x / 3, Param(AllOptions).y / 6);
+        StartCoroutine(Timeticks());
+        AllOptions.transform.Find("CheckClock").GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(AllOptions).x / 3, Param(AllOptions).y / 6);
+        InputTimeDate.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(AllOptions).x / 9, Param(AllOptions).y / 12);
     }
 
     // Update is called once per frame
@@ -444,6 +449,8 @@ public class Interface : MonoBehaviour
             text.text = "Options";
             AllOptions.SetActive(true);
             PoseWavePanel.SetActive(false);
+            modepanel.SetActive(false);
+            
         }
         else if (gm.state == "SwitchingPose")
         {
@@ -483,6 +490,7 @@ public class Interface : MonoBehaviour
         }
         else
         {
+            modepanel.SetActive(true);
             AllOptions.SetActive(false);
             PoseWavePanel.SetActive(false);
         }
@@ -529,5 +537,14 @@ public class Interface : MonoBehaviour
         bodytext.text = "Body:" + bodyslider.value;
         spinetext.text = "Spine:" + spineslider.value;
 
+    }
+
+    public IEnumerator Timeticks()
+    {
+        while (true)
+        {
+            dt += new TimeSpan(0, 0, 1);
+            yield return new WaitForSecondsRealtime(1);
+        }
     }
 }

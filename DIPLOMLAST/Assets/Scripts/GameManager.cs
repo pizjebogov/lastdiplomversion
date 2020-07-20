@@ -165,7 +165,7 @@ public class GameManager : MonoBehaviour
             switch (mode)
             {
                 case ("HeadMode"):
-                    newangle = Mathf.Clamp(localheadangle + rotatedegrees, -AngularHeadLimit, AngularHeadLimit);
+                    newangle = Mathf.Clamp(localheadangle + rotatedegrees, 0, AngularHeadLimit);
                     rotatedegrees = newangle - localheadangle;
                     head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotatedegrees);
                     break;
@@ -194,7 +194,7 @@ public class GameManager : MonoBehaviour
             switch (mode)
             {
                 case ("HeadMode"):
-                    newangle = Mathf.Clamp(localheadangle - rotatedegrees, -AngularHeadLimit, AngularHeadLimit);
+                    newangle = Mathf.Clamp(localheadangle - rotatedegrees, 0, AngularHeadLimit);
                     rotatedegrees = Mathf.Abs(localheadangle - newangle);
                     head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotatedegrees);
                     break;
