@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using UnityEngine.Rendering;
 
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     public float rotationspeed;
     public GameObject anchorheadbody, anchorbodylegs;
     public float AngularHeadLimit, AngularBodyLimit, AngularSpineLimit;
+    public Interface Interface;
     void Start()
     {
         rotationspeed = 10;
@@ -165,15 +167,20 @@ public class GameManager : MonoBehaviour
             switch (mode)
             {
                 case ("HeadMode"):
-                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed * Time.deltaTime);
+                    newangle = Mathf.Clamp(localheadangle + rotatedegrees, -AngularHeadLimit, AngularHeadLimit);
+                    rotatedegrees = newangle - localheadangle;
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotatedegrees);
                     break;
                 case ("BodyMode"):
-                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed * Time.deltaTime);
-                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, 2* rotationspeed * Time.deltaTime);
+                    newangle = Mathf.Clamp(localbodyangle + rotatedegrees, 0, AngularBodyLimit);
+                    rotatedegrees = newangle - localbodyangle;
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotatedegrees);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, 1.95f* rotatedegrees);
+
                     break;
                 case ("LegMode"):
-                    
-                    newangle = Mathf.Clamp(locallegangle + rotatedegrees, -10, 10);
+
+                    newangle = Mathf.Clamp(locallegangle+rotatedegrees,-2 * localbodyangle,0);
                     rotatedegrees = newangle - locallegangle;
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotatedegrees);
                     break;
@@ -189,15 +196,23 @@ public class GameManager : MonoBehaviour
             switch (mode)
             {
                 case ("HeadMode"):
-                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed * Time.deltaTime);
+                    newangle = Mathf.Clamp(localheadangle - rotatedegrees, -AngularHeadLimit, AngularHeadLimit);
+                    rotatedegrees = Mathf.Abs(localheadangle - newangle);
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotatedegrees);
                     break;
                 case ("BodyMode"):
-                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed * Time.deltaTime);
-                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, 2*rotationspeed * Time.deltaTime);
+                    if(localbodyangle * -2 <= locallegangle+5 && localbodyangle *-2 >=locallegangle-5) { 
+                    newangle = Mathf.Clamp(localbodyangle - rotatedegrees, 0, AngularBodyLimit);
+                    rotatedegrees =Mathf.Abs(localbodyangle - newangle);
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotatedegrees);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, 2f * rotatedegrees);
+                    }
+                    else {Interface.InfoModeText.GetComponent<Text>().text="You should calibrate legs to " + localbodyangle*-2 + " degrees" ; }
+                    
                     break;
                 case ("LegMode"):
-                    newangle = Mathf.Clamp((locallegangle - rotatedegrees), -10, 10);
-                    rotatedegrees = Mathf.Abs(newangle -locallegangle);
+                    newangle = Mathf.Clamp(locallegangle - rotatedegrees, -2 * localbodyangle, 0);
+                    rotatedegrees = Mathf.Abs(locallegangle - newangle);
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotatedegrees);
                     break;
                 case ("SpineMode"):

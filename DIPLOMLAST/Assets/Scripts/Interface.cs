@@ -282,25 +282,47 @@ public class Interface : MonoBehaviour
             {
                 if (gm.mode == "HeadMode") 
                 {
-                    text.text = "Position:Head\tAngle:" + gm.headangle;
+                    text.text = "Position:Head\tAngle:" + gm.localheadangle;
                     foreach (Button mode in ModeButtons)
                     {
                         mode.GetComponent<Image>().color = new Color(1,1,1,0.5f);
                         ModeButtons[0].GetComponent<Image>().color = new Color(1, 1, 1, 1);
                     }
+                    foreach(GameObject angle in anglebuttons)
+                    {
+                        if(Convert.ToSingle(angle.gameObject.name) > gm.AngularHeadLimit)
+                        {
+                            angle.SetActive(false);
+                        }
+                        else
+                        {
+                            angle.SetActive(true);
+                        }
+                    }
                 }
                 else if (gm.mode == "BodyMode")
                 {
-                    text.text = "Position:Body\tAngle:" + gm.bodyangle;
+                    text.text = "Position:Body\tAngle:" + gm.localbodyangle;
                     foreach (Button mode in ModeButtons)
                     {
                         mode.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
                         ModeButtons[1].GetComponent<Image>().color = new Color(1, 1, 1, 1);
                     }
+                    foreach (GameObject angle in anglebuttons)
+                    {
+                        if (Convert.ToSingle(angle.gameObject.name) > gm.AngularBodyLimit)
+                        {
+                            angle.SetActive(false);
+                        }
+                        else
+                        {
+                            angle.SetActive(true);
+                        }
+                    }
                 }
                 else if (gm.mode == "LegMode")
                 {
-                    text.text = "Position:Legs\tAngle:" + gm.legangle;
+                    text.text = "Position:Legs\tAngle:" + gm.locallegangle;
                     foreach (Button mode in ModeButtons)
                     {
                         mode.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
@@ -314,6 +336,17 @@ public class Interface : MonoBehaviour
                     {
                         mode.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
                         ModeButtons[3].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+                    }
+                    foreach (GameObject angle in anglebuttons)
+                    {
+                        if (Convert.ToSingle(angle.gameObject.name) > gm.AngularSpineLimit)
+                        {
+                            angle.SetActive(false);
+                        }
+                        else
+                        {
+                            angle.SetActive(true);
+                        }
                     }
                 }
 
