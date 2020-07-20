@@ -66,6 +66,7 @@ public class Interface : MonoBehaviour
         checkupdown();
         checktextinfo();
         checkstate();
+        anglemaximum();
     }
     public void Calibrate(GameObject objectforcalib, float width,float height,float posx,float posy)
     {
@@ -486,5 +487,47 @@ public class Interface : MonoBehaviour
             PoseWavePanel.SetActive(false);
         }
     }
+    public void anglemaximum()
+    {
+        GameObject maxangle = AllOptions.transform.Find("MaxAngle").gameObject;
+        GameObject head = maxangle.transform.Find("Head").gameObject;
+        GameObject body= maxangle.transform.Find("Body").gameObject;
+        GameObject spine = maxangle.transform.Find("Spine").gameObject;
+        Slider headslider = head.transform.Find("Slider").GetComponent<Slider>();
+        Text headtext = head.transform.Find("Panel").Find("Text").GetComponent<Text>();
+        Slider bodyslider = body.transform.Find("Slider").GetComponent<Slider>();
+        Text bodytext = body.transform.Find("Panel").Find("Text").GetComponent<Text>();
+        Slider spineslider = spine.transform.Find("Slider").GetComponent<Slider>();
+        Text spinetext = spine.transform.Find("Panel").Find("Text").GetComponent<Text>();
+        
 
+        if (gm.localheadangle<headslider.value) 
+        {
+            gm.AngularHeadLimit = headslider.value;
+        }
+        else
+        {
+            headslider.value = gm.AngularHeadLimit;
+        }
+        if (gm.localbodyangle < bodyslider.value)
+        {
+            gm.AngularBodyLimit = bodyslider.value;
+        }
+        else
+        {
+            bodyslider.value = gm.AngularBodyLimit;
+        }
+        if (gm.localspineangle < spineslider.value)
+        {
+            gm.AngularSpineLimit = spineslider.value;
+        }
+        else
+        {
+            spineslider.value = gm.AngularSpineLimit;
+        }
+        headtext.text = "Head:" + headslider.value;
+        bodytext.text = "Body:" + bodyslider.value;
+        spinetext.text = "Spine:" + spineslider.value;
+
+    }
 }

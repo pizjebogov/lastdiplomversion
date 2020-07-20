@@ -24,9 +24,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         rotationspeed = 10;
-        AngularHeadLimit = 20;
-        AngularSpineLimit = 45;
-        AngularBodyLimit = 50;
+        
     }
 
     // Update is called once per frame
