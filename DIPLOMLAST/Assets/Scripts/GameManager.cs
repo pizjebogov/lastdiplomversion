@@ -24,9 +24,11 @@ public class GameManager : MonoBehaviour
     public Interface Interface;
     public float motiondegrees,variant,percentage;
     public float[] ZeroAngles = new float[4];
+    public float wavecount;
     void Start()
     {
         rotationspeed = 10;
+        
         
     }
 
@@ -51,12 +53,11 @@ public class GameManager : MonoBehaviour
             down = false;
         }
 
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            CountZero();
-            InvokeRepeating("GoingZero", 0.1f, 0.1f);
+            StartCoroutine(PoseStaying("Chair"));
         }
+        
 
     }
     public void blocksomething(string something)
@@ -395,17 +396,20 @@ public class GameManager : MonoBehaviour
             {
                 if(ZeroAngles[0] > rotationspeed / 20)
                 {
+                    pose = "Head";
                     head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed / 20);
                     ZeroAngles[0] -= rotationspeed / 20;
                 }
                 else if (ZeroAngles[1] > rotationspeed / 20)
                 {
+                    pose = "Body";
                     body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed / 20);
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed / 10);
                     ZeroAngles[1] -= rotationspeed / 20;
                 }
                 else if (ZeroAngles[3] > rotationspeed / 20)
                 {
+                    pose = "Spine";
                     if (localspineangle > rotationspeed/20) 
                     {
                         spine.transform.Rotate(Vector3.forward, rotationspeed / 20);
@@ -424,21 +428,25 @@ public class GameManager : MonoBehaviour
                 {
                     head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed / 20);
                     ZeroAngles[0] -= rotationspeed / 20;
+                    pose = "Head";
                 }
 
                 else if (ZeroAngles[2] > rotationspeed / 20)
                 {
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed / 20);
                     ZeroAngles[2] -= rotationspeed / 20;
+                    pose = "Legs";
                 }
                 else if (ZeroAngles[1] > rotationspeed / 20)
                 {
                     body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed / 20);
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed / 10);
                     ZeroAngles[1] -= rotationspeed / 20;
+                    pose = "Body";
                 }
                 else if (ZeroAngles[3] > rotationspeed / 20)
                 {
+                    pose = "Spine";
                     if (localspineangle > rotationspeed / 20)
                     {
                         spine.transform.Rotate(Vector3.forward, rotationspeed / 20);
@@ -469,6 +477,16 @@ public class GameManager : MonoBehaviour
             else if(state=="Chair"|| state == "ModifiedChair" || state == "Dinner" || state == "Verticalize" || state == "Mode5")
             {
                 StartCoroutine(PoseStaying(state));
+            }
+            if (mode == "ProgramWave")
+            {
+                InvokeRepeating("WaveProg", 0.1f, 0.1f);
+            }
+            else if (mode == "GoingZeroMode")
+            {
+                pose = null;
+                state = null;
+
             }
         }
     }
@@ -510,5 +528,86 @@ public class GameManager : MonoBehaviour
                 StopCoroutine(PoseStaying(state));
                 break;
         }
+    }
+    public void calibrateall()
+    {
+        CountZero();
+        InvokeRepeating("GoingZero", 0.1f, 0.1f);
+    }
+
+    public void WaveProg()
+    {
+        if (wavecount > 0)
+        {
+            if(wavecount<=200 && wavecount > 170)
+            {
+                head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed / 20);
+                wavecount -= rotationspeed / 20;
+            }
+            else if(wavecount<=170 && wavecount > 160)
+            {
+                wavecount -= rotationspeed / 20;
+            }
+            else if(wavecount<=160 && wavecount > 130)
+            {
+                body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed / 20);
+                legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed / 10);
+                wavecount -= rotationspeed / 20;
+            }
+            else if (wavecount <= 130 && wavecount > 110)
+            {
+                legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed / 20);
+                wavecount -= rotationspeed / 50;
+            }
+            else if(wavecount <=110 && wavecount > 100)
+            {
+                wavecount -= rotationspeed / 20;
+            }
+            else if(wavecount<=100 && wavecount > 90)
+            {
+                spine.transform.Rotate(Vector3.back, rotationspeed / 20);
+                wavecount -= rotationspeed / 20;
+            }
+            else if(wavecount<=90 && wavecount > 60)
+            {
+                head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed / 20);
+                wavecount -= rotationspeed / 20;
+            }
+            else if (wavecount <= 60 && wavecount > 40)
+            {
+                legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed / 20);
+                wavecount -= rotationspeed / 50;
+            }
+            else if (wavecount <= 40 && wavecount > 10)
+            {
+                body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed / 20);
+                legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed / 10);
+                wavecount -= rotationspeed / 20;
+            }
+            else if (wavecount <= 10 && wavecount > 0)
+            {
+                spine.transform.Rotate(Vector3.forward, rotationspeed / 20);
+                wavecount -= rotationspeed / 20;
+            }
+        }
+        else
+        {
+            wavecount = 200;
+        }
+    }
+    public void StartProg()
+    {
+        state = "Calibrating";
+        pose = null;
+        calibrateall();
+
+    }
+    public void StopProg()
+    {
+        state = null;
+        pose = null;
+        CancelInvoke("GoingZero");
+        CancelInvoke("WaveProg");
+        wavecount = 0;
     }
 }

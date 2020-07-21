@@ -584,7 +584,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 64531913}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420035}
+        m_MethodName: StartProg
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &64531913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1732,7 +1743,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 310661816}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420035}
+        m_MethodName: goingtoangle
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &310661816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3136,7 +3158,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 484103186}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420035}
+        m_MethodName: stoprotatingtoangle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &484103186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3446,6 +3479,10 @@ MonoBehaviour:
   - {fileID: 1034764128}
   - {fileID: 2116949592}
   - {fileID: 939582936}
+  OptionButtons:
+  - {fileID: 1738057342}
+  - {fileID: 1170327500}
+  - {fileID: 1863651018}
 --- !u!114 &519420035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3486,6 +3523,15 @@ MonoBehaviour:
   AngularBodyLimit: 0
   AngularSpineLimit: 0
   Interface: {fileID: 519420034}
+  motiondegrees: 0
+  variant: 0
+  percentage: 0
+  ZeroAngles:
+  - 0
+  - 0
+  - 0
+  - 0
+  wavecount: 0
 --- !u!1 &543009580
 GameObject:
   m_ObjectHideFlags: 0
@@ -5222,7 +5268,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 804567132}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420035}
+        m_MethodName: goingtoangle
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 60
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &804567132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6566,7 +6623,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1070795028}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420035}
+        m_MethodName: goingtoangle
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 45
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1070795028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10471,7 +10539,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1981264204}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420035}
+        m_MethodName: goingtoangle
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 30
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1981264204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11014,7 +11093,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2048724684}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420035}
+        m_MethodName: goingtoangle
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 15
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2048724684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11714,7 +11804,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2138447107}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420035}
+        m_MethodName: StopProg
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2138447107
 MonoBehaviour:
   m_ObjectHideFlags: 0
