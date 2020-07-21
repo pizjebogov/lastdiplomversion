@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using UnityEngine.Rendering;
+using System.Runtime.ExceptionServices;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,7 +22,8 @@ public class GameManager : MonoBehaviour
     public GameObject anchorheadbody, anchorbodylegs;
     public float AngularHeadLimit, AngularBodyLimit, AngularSpineLimit;
     public Interface Interface;
-    public float motiondegrees;
+    public float motiondegrees,variant,percentage;
+    public float[] ZeroAngles = new float[4];
     void Start()
     {
         rotationspeed = 10;
@@ -47,6 +49,13 @@ public class GameManager : MonoBehaviour
         {
             up = false;
             down = false;
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CountZero();
+            InvokeRepeating("GoingZero", 0.1f, 0.1f);
         }
 
     }
@@ -179,7 +188,7 @@ public class GameManager : MonoBehaviour
                     break;
                 case ("LegMode"):
 
-                    newangle = Mathf.Clamp(locallegangle+rotatedegrees,-2 * localbodyangle,0);
+                    newangle = Mathf.Clamp(locallegangle+rotatedegrees, (-2 * localbodyangle) - 1, 1);
                     rotatedegrees = newangle - locallegangle;
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotatedegrees);
                     break;
@@ -200,7 +209,7 @@ public class GameManager : MonoBehaviour
                     head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotatedegrees);
                     break;
                 case ("BodyMode"):
-                    if(localbodyangle * -2 <= locallegangle+5 && localbodyangle *-2 >=locallegangle-5) { 
+                    if(localbodyangle * -2 <= locallegangle+3 && localbodyangle *-2 >=locallegangle-3) { 
                     newangle = Mathf.Clamp(localbodyangle - rotatedegrees, 0, AngularBodyLimit);
                     rotatedegrees =Mathf.Abs(localbodyangle - newangle);
                     body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotatedegrees);
@@ -210,7 +219,7 @@ public class GameManager : MonoBehaviour
                     
                     break;
                 case ("LegMode"):
-                    newangle = Mathf.Clamp(locallegangle - rotatedegrees, -2 * localbodyangle, 0);
+                    newangle = Mathf.Clamp(locallegangle - rotatedegrees, (-2 * localbodyangle)-1, 1);
                     rotatedegrees = Mathf.Abs(locallegangle - newangle);
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotatedegrees);
                     break;
@@ -236,6 +245,8 @@ public class GameManager : MonoBehaviour
                 {
                     motiondegrees = localheadangle-angle;
                 }
+                state = "Calibrating";
+                InvokeRepeating("rotatingtocurrentangle", 0.1f, 0.1f);
                 break;
             case ("BodyMode"):
                 if (localbodyangle > angle)
@@ -245,6 +256,15 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     motiondegrees = localbodyangle-angle;
+                }
+                if (localbodyangle * -2 <= locallegangle + 3 && localbodyangle * -2 >= locallegangle - 3)
+                {
+                    state = "Calibrating";
+                    InvokeRepeating("rotatingtocurrentangle", 0.1f, 0.1f);
+                }
+                else
+                {
+                    Interface.InfoModeText.GetComponent<Text>().text = "You should calibrate legs to " + localbodyangle * -2 + " degrees";
                 }
                 break;
             case ("LegMode"):
@@ -256,6 +276,8 @@ public class GameManager : MonoBehaviour
                 {
                     motiondegrees = locallegangle-angle;
                 }
+                state = "Calibrating";
+                InvokeRepeating("rotatingtocurrentangle", 0.1f, 0.1f);
                 break;
             case ("SpineMode"):
                 if (localspineangle > angle)
@@ -266,10 +288,11 @@ public class GameManager : MonoBehaviour
                 {
                     motiondegrees = localspineangle-angle;
                 }
+                state = "Calibrating";
+                InvokeRepeating("rotatingtocurrentangle", 0.1f, 0.1f);
                 break;
         }
-        state = "Calibrating";
-        InvokeRepeating("rotatingtocurrentangle", 0.1f, 0.1f);
+        
     }
     public void rotatingtocurrentangle()
     {
@@ -333,5 +356,159 @@ public class GameManager : MonoBehaviour
         motiondegrees = 0;
         CancelInvoke("rotatingtocurrentangle");
         state = null;
+    }
+
+    public void CountZero()
+    {
+        ZeroAngles[0] = localheadangle;
+        if (localbodyangle * -2 == locallegangle)
+        {
+            variant = 1;
+            ZeroAngles[1] =  localbodyangle;
+            ZeroAngles[2] = 0;
+
+        }
+        else
+        {
+            variant = 2;
+            ZeroAngles[1] = localbodyangle;
+            ZeroAngles[2] = Mathf.Abs((localbodyangle * -2) + Mathf.Abs(locallegangle));
+        }
+        if (localspineangle > 0)
+        {
+            ZeroAngles[3] = localspineangle;
+        }
+        else
+        {
+            ZeroAngles[3] = Mathf.Abs(localspineangle);
+        }
+        for(int i = 0; i < 4; i++)
+        {
+            percentage += ZeroAngles[i];
+        }
+    }
+    public void GoingZero()
+    {
+        if(ZeroAngles[0]>rotationspeed/20 || ZeroAngles[1] > rotationspeed / 20 || ZeroAngles[2] > rotationspeed / 20 || ZeroAngles[3] > rotationspeed / 20)
+        {
+            if (variant == 1)
+            {
+                if(ZeroAngles[0] > rotationspeed / 20)
+                {
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed / 20);
+                    ZeroAngles[0] -= rotationspeed / 20;
+                }
+                else if (ZeroAngles[1] > rotationspeed / 20)
+                {
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed / 20);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed / 10);
+                    ZeroAngles[1] -= rotationspeed / 20;
+                }
+                else if (ZeroAngles[3] > rotationspeed / 20)
+                {
+                    if (localspineangle > rotationspeed/20) 
+                    {
+                        spine.transform.Rotate(Vector3.forward, rotationspeed / 20);
+                        ZeroAngles[3] -= rotationspeed / 20;
+                    }
+                    else if (localspineangle < -rotationspeed / 20)
+                    {
+                        spine.transform.Rotate(Vector3.back, rotationspeed / 20);
+                        ZeroAngles[3] -= rotationspeed / 20;
+                    }
+                }
+            }
+            else if (variant == 2)
+            {
+                if (ZeroAngles[0] > rotationspeed / 20)
+                {
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed / 20);
+                    ZeroAngles[0] -= rotationspeed / 20;
+                }
+
+                else if (ZeroAngles[2] > rotationspeed / 20)
+                {
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed / 20);
+                    ZeroAngles[2] -= rotationspeed / 20;
+                }
+                else if (ZeroAngles[1] > rotationspeed / 20)
+                {
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed / 20);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed / 10);
+                    ZeroAngles[1] -= rotationspeed / 20;
+                }
+                else if (ZeroAngles[3] > rotationspeed / 20)
+                {
+                    if (localspineangle > rotationspeed / 20)
+                    {
+                        spine.transform.Rotate(Vector3.forward, rotationspeed / 20);
+                        ZeroAngles[3] -= rotationspeed / 20;
+                    }
+                    else if (localspineangle < -rotationspeed / 20)
+                    {
+                        spine.transform.Rotate(Vector3.back, rotationspeed / 20);
+                        ZeroAngles[3] -= rotationspeed / 20;
+                    }
+                }
+            }
+        }
+        else
+        {
+            CancelInvoke("GoingZero");
+            for (int i = 0; i < 4; i++)
+            {
+                ZeroAngles[i] = 0;
+            }
+            if (state == "Quit")
+            {
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#endif
+                Application.Quit();
+            }
+            else if(state=="Chair"|| state == "ModifiedChair" || state == "Dinner" || state == "Verticalize" || state == "Mode5")
+            {
+                StartCoroutine(PoseStaying(state));
+            }
+        }
+    }
+    public IEnumerator PoseStaying(string whatpose)
+    {
+        switch (whatpose)
+        {
+            case ("Chair"):
+                for(int i = 0; i < 45; i+=1)
+                {
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, 1);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                for(int i = 0; i < 20; i++)
+                {
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, 1);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, 2);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                StopCoroutine(PoseStaying(state));
+                break;
+            case ("ModifiedChair"):
+                for (int i = 0; i < 45; i += 1)
+                {
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, 1);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                for (int i = 0; i < 20; i++)
+                {
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, 1);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, 2);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                for(int i = 0; i < 10; i++)
+                {
+                    spine.transform.Rotate(Vector3.forward, 1);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                StopCoroutine(PoseStaying(state));
+                break;
+        }
     }
 }

@@ -25,6 +25,7 @@ public class Interface : MonoBehaviour
     public DateTime dt;
     public GameObject InputTimeDate;
     public Text[] timedateinputs = new Text[6];
+    public Button[] OptionButtons = new Button[3];
     void Start()
     {
         Calibrate(InfoOptionsPanel, Screen.width, Screen.height / 8, 0, -Screen.height / 16);
@@ -384,6 +385,10 @@ public class Interface : MonoBehaviour
                 {
                     mode.GetComponent<Button>().interactable = false;
                 }
+                foreach(Button option in OptionButtons)
+                {
+                    option.GetComponent<Button>().interactable = false;
+                }
             }
             else if(gm.state != "Calibrating")
             {
@@ -393,6 +398,10 @@ public class Interface : MonoBehaviour
                 foreach(Button mode in ModeButtons)
                 {
                     mode.GetComponent<Button>().interactable = true;
+                }
+                foreach (Button option in OptionButtons)
+                {
+                    option.GetComponent<Button>().interactable = true;
                 }
             }
         }
