@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public GameObject anchorheadbody, anchorbodylegs;
     public float AngularHeadLimit, AngularBodyLimit, AngularSpineLimit;
     public Interface Interface;
+    public float motiondegrees;
     void Start()
     {
         rotationspeed = 10;
@@ -220,5 +221,117 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void goingtoangle(float angle)
+    {
+        switch (mode)
+        {
+            case ("HeadMode"):
+                if (localheadangle > angle)
+                {
+                    motiondegrees = Mathf.Abs(angle-localheadangle);
+                }
+                else
+                {
+                    motiondegrees = localheadangle-angle;
+                }
+                break;
+            case ("BodyMode"):
+                if (localbodyangle > angle)
+                {
+                    motiondegrees =  Mathf.Abs(angle-localbodyangle);
+                }
+                else
+                {
+                    motiondegrees = localbodyangle-angle;
+                }
+                break;
+            case ("LegMode"):
+                if (locallegangle > angle)
+                {
+                    motiondegrees = Mathf.Abs(angle-locallegangle);
+                }
+                else
+                {
+                    motiondegrees = locallegangle-angle;
+                }
+                break;
+            case ("SpineMode"):
+                if (localspineangle > angle)
+                {
+                    motiondegrees = Mathf.Abs(angle-localspineangle);
+                }
+                else
+                {
+                    motiondegrees = localspineangle-angle;
+                }
+                break;
+        }
+        state = "Calibrating";
+        InvokeRepeating("rotatingtocurrentangle", 0.1f, 0.1f);
+    }
+    public void rotatingtocurrentangle()
+    {
+        if (motiondegrees < -rotationspeed / 20)
+        {
+            switch (mode)
+            {
+                case ("HeadMode"):
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed / 20);
+                    motiondegrees += rotationspeed / 20;
+                    break;
+                case ("BodyMode"):
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed / 20);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, 1.95f * rotationspeed / 20);
+                    motiondegrees += rotationspeed / 20;
+                    break;
+                case ("LegMode"):
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed / 20);
+                    motiondegrees += rotationspeed / 20;
+                    break;
+                case ("SpineMode"):
+                    spine.transform.Rotate(Vector3.back, rotationspeed / 20);
+                    motiondegrees += rotationspeed / 20;
+                    break;
+
+            }
+        }
+        else if(motiondegrees > rotationspeed / 20)
+        {
+            switch (mode)
+            {
+                case ("HeadMode"):
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed / 20);
+                    motiondegrees -= rotationspeed / 20;
+                    break;
+                case ("BodyMode"):
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed / 20);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, 1.95f * rotationspeed / 20);
+                    motiondegrees -= rotationspeed / 20;
+                    break;
+                case ("LegMode"):
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed / 20);
+                    motiondegrees -= rotationspeed / 20;
+                    break;
+                case ("SpineMode"):
+                    spine.transform.Rotate(Vector3.forward, rotationspeed / 20);
+                    motiondegrees -= rotationspeed / 20;
+                    break;
+
+            }
+        }
+        else
+        {
+            motiondegrees = 0;
+            CancelInvoke("rotatingtocurrentangle");
+            state = null;
+        }
+    }
+    public void stoprotatingtoangle()
+    {
+        motiondegrees = 0;
+        CancelInvoke("rotatingtocurrentangle");
+        state = null;
     }
 }
