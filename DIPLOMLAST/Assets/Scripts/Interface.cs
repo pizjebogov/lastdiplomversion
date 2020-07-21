@@ -440,6 +440,10 @@ public class Interface : MonoBehaviour
                 {
                     mode.GetComponent<Button>().interactable = false;
                 }
+                foreach (Button option in OptionButtons)
+                {
+                    option.GetComponent<Button>().interactable = false;
+                }
             }
             else if (gm.state != "Calibrating")
             {
@@ -449,13 +453,19 @@ public class Interface : MonoBehaviour
                 {
                     mode.GetComponent<Button>().interactable = true;
                 }
+                foreach (Button option in OptionButtons)
+                {
+                    option.GetComponent<Button>().interactable = true;
+                }
+
             }
         }
         else {
+            
             anglepanel.SetActive(false);
             MotionPanel.SetActive(false);
             StartStopPanel.SetActive(false);
-            if (gm.state != "Quit" || gm.state != "SwitchingPose" || gm.state != "Options")
+            if (gm.state != "Quit" && gm.state != "SwitchingPose" && gm.state != "Options" && gm.state != "Chair" && gm.state != "ModifiedChair" && gm.state != "Dinner" && gm.state != "Verticalize" && gm.state != "Mode5")
             {
                 foreach (Button mode in ModeButtons)
                 {
@@ -463,6 +473,7 @@ public class Interface : MonoBehaviour
                     mode.GetComponent<Button>().interactable = true;
                 }
                 text.text = "All Information Will Be Displayed Here";
+
             }
         }
     }
@@ -480,6 +491,7 @@ public class Interface : MonoBehaviour
         }
         else if (gm.state == "SwitchingPose")
         {
+            gm.mode = null;
             text.text = "Here you can choose needed mode or pose";
             AllOptions.SetActive(false);
             PoseWavePanel.SetActive(true);
@@ -487,9 +499,9 @@ public class Interface : MonoBehaviour
             {
                 mode.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
                 mode.GetComponent<Button>().interactable = false;
-                ModeButtons[5].GetComponent<Image>().color = new Color(1, 1, 1, 1);
-                ModeButtons[5].GetComponent<Button>().interactable = true;
             }
+            ModeButtons[5].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+            ModeButtons[5].GetComponent<Button>().interactable = true;
             if (Input.touchCount > 0)
             {
                 Touch touch = Input.GetTouch(0);
@@ -514,11 +526,34 @@ public class Interface : MonoBehaviour
             AllOptions.SetActive(false);
             PoseWavePanel.SetActive(false);
         }
+        else if(gm.state=="Chair"|| gm.state == "ModifiedChair" || gm.state == "Dinner" || gm.state == "Verticalize" || gm.state == "Mode5")
+        {
+            text.text = "Calibrating to " + gm.state + " position";
+            gm.mode = null;
+            foreach (Button option in OptionButtons)
+            {
+                option.GetComponent<Button>().interactable = false;
+            }
+            foreach (Button mode in ModeButtons)
+            {
+                mode.GetComponent<Button>().interactable = false;
+            }
+            StartStopPanel.SetActive(false);
+            MotionPanel.SetActive(false);
+            PoseWavePanel.SetActive(false);
+        }
         else
         {
-            modepanel.SetActive(true);
-            AllOptions.SetActive(false);
-            PoseWavePanel.SetActive(false);
+            if (gm.state != "Calibrating")
+            {
+                modepanel.SetActive(true);
+                AllOptions.SetActive(false);
+                PoseWavePanel.SetActive(false);
+                foreach (Button option in OptionButtons)
+                {
+                    option.GetComponent<Button>().interactable = true;
+                }
+            }
         }
     }
     public void anglemaximum()

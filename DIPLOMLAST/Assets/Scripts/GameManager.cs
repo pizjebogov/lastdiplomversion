@@ -506,7 +506,9 @@ public class GameManager : MonoBehaviour
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, 2);
                     yield return new WaitForSeconds(0.1f);
                 }
-                StopCoroutine(PoseStaying(state));
+                state = null;
+                mode = null;
+                StopCoroutine(PoseStaying("Chair"));
                 break;
             case ("ModifiedChair"):
                 for (int i = 0; i < 45; i += 1)
@@ -525,7 +527,9 @@ public class GameManager : MonoBehaviour
                     spine.transform.Rotate(Vector3.forward, 1);
                     yield return new WaitForSeconds(0.1f);
                 }
-                StopCoroutine(PoseStaying(state));
+                state = null;
+                mode = null;
+                StopCoroutine(PoseStaying("ModifiedChair"));
                 break;
         }
     }
@@ -609,5 +613,10 @@ public class GameManager : MonoBehaviour
         CancelInvoke("GoingZero");
         CancelInvoke("WaveProg");
         wavecount = 0;
+    }
+    public void poseorquit(string whatweneed)
+    {
+        state = whatweneed;
+        calibrateall();
     }
 }
