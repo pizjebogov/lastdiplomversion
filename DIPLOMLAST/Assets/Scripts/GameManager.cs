@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     public float motiondegrees,variant,percentage;
     public float[] ZeroAngles = new float[4];
     public float wavecount;
+    public string ip, port, id, information;
+    public bool connectedtoserver;
     void Start()
     {
         rotationspeed = 10;
@@ -433,9 +435,18 @@ public class GameManager : MonoBehaviour
 
                 else if (ZeroAngles[2] > rotationspeed / 20)
                 {
-                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed / 20);
-                    ZeroAngles[2] -= rotationspeed / 20;
-                    pose = "Legs";
+                    if (locallegangle < -2 * localbodyangle)
+                    {
+                        legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed / 20);
+                        ZeroAngles[2] -= rotationspeed / 20;
+                        pose = "Legs";
+                    }
+                    else
+                    {
+                        legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed / 20);
+                        ZeroAngles[2] -= rotationspeed / 20;
+                        pose = "Legs";
+                    }
                 }
                 else if (ZeroAngles[1] > rotationspeed / 20)
                 {
@@ -476,10 +487,12 @@ public class GameManager : MonoBehaviour
             }
             else if(state=="Chair"|| state == "ModifiedChair" || state == "Dinner" || state == "Verticalize" || state == "Mode5")
             {
+                pose = null;
                 StartCoroutine(PoseStaying(state));
             }
             if (mode == "ProgramWave")
             {
+                pose = null;
                 InvokeRepeating("WaveProg", 0.1f, 0.1f);
             }
             else if (mode == "GoingZeroMode")
@@ -618,5 +631,20 @@ public class GameManager : MonoBehaviour
     {
         state = whatweneed;
         calibrateall();
+    }
+
+    public IEnumerator Sendinfo(string neededinformation) 
+    {
+        if (connectedtoserver && Application.internetReachability != NetworkReachability.NotReachable)
+        {
+            string URL = "http://" + ip + ":" + port;
+            WWWForm form = new WWWForm();
+            form.AddField("ID", id);
+            form.AddField("Time", Time.time.ToString());
+            form.AddField("Information", neededinformation);
+            WWW www = new WWW(URL, form);
+            yield return www;
+            Debug.Log("Server answer:" + www.text);
+        }
     }
 }

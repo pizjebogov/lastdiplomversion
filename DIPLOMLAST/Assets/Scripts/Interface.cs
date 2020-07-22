@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -60,6 +62,7 @@ public class Interface : MonoBehaviour
         StartCoroutine(Timeticks());
         AllOptions.transform.Find("CheckClock").GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(AllOptions).x / 3, Param(AllOptions).y / 6);
         InputTimeDate.GetComponent<GridLayoutGroup>().cellSize = new Vector2(Param(AllOptions).x / 9, Param(AllOptions).y / 12);
+        
     }
 
     // Update is called once per frame
@@ -74,6 +77,17 @@ public class Interface : MonoBehaviour
         checktextinfo();
         checkstate();
         anglemaximum();
+        if (Input.GetKey(KeyCode.Z))
+        {
+            PoseWavePanel.transform.Translate(Vector3.left * 150 * Time.deltaTime);
+        }
+        else if (Input.GetKey(KeyCode.X))
+        {
+            PoseWavePanel.transform.Translate(Vector3.right * 150 * Time.deltaTime);
+        }
+
+        PoseWavePanel.transform.localPosition = new Vector3(Mathf.Clamp(PoseWavePanel.transform.localPosition.x, -Screen.width * 0.75f, Screen.width * 0.75f), PoseWavePanel.transform.localPosition.y, PoseWavePanel.transform.localPosition.z);
+       
     }
     public void Calibrate(GameObject objectforcalib, float width,float height,float posx,float posy)
     {
@@ -429,6 +443,11 @@ public class Interface : MonoBehaviour
                         mode.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
                         ModeButtons[5].GetComponent<Image>().color = new Color(1, 1, 1, 1);
                     }
+                    PoseWavePanel.SetActive(false);
+                    /*if (gm.state != "Calibrating")
+                    {
+                        gm.state = null;
+                    }*/
                 }
                 
             }
@@ -491,17 +510,17 @@ public class Interface : MonoBehaviour
         }
         else if (gm.state == "SwitchingPose")
         {
-            gm.mode = null;
+            
             text.text = "Here you can choose needed mode or pose";
             AllOptions.SetActive(false);
             PoseWavePanel.SetActive(true);
-            foreach (Button mode in ModeButtons)
+            for(int i = 0; i < 5; i++)
             {
-                mode.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
-                mode.GetComponent<Button>().interactable = false;
+                ModeButtons[i].interactable = false;
+                ModeButtons[i].GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+                ModeButtons[5].interactable = true;
+                ModeButtons[5].GetComponent<Image>().color = new Color(1, 1, 1, 1);
             }
-            ModeButtons[5].GetComponent<Image>().color = new Color(1, 1, 1, 1);
-            ModeButtons[5].GetComponent<Button>().interactable = true;
             if (Input.touchCount > 0)
             {
                 Touch touch = Input.GetTouch(0);
@@ -516,15 +535,26 @@ public class Interface : MonoBehaviour
                     PoseWavePanel.transform.Translate(new Vector3(touchdirection.x, 0, 0) * 10 * Time.deltaTime);
 
                 }
+
+                
             }
+           // gm.mode = null;
 
         }
         else if (gm.state == "Quit")
         {
             text.text = "Quitting from app.\n Please wait untill calibration";
             text.color = Color.red;
+            MotionPanel.SetActive(false);
+            StartStopPanel.SetActive(false);
             AllOptions.SetActive(false);
             PoseWavePanel.SetActive(false);
+            anglepanel.SetActive(false);
+            foreach(Button mode in ModeButtons)
+            {
+                mode.interactable = false;
+            }
+            gm.mode = null; 
         }
         else if(gm.state=="Chair"|| gm.state == "ModifiedChair" || gm.state == "Dinner" || gm.state == "Verticalize" || gm.state == "Mode5")
         {
