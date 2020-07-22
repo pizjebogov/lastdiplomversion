@@ -508,11 +508,13 @@ public class GameManager : MonoBehaviour
         switch (whatpose)
         {
             case ("Chair"):
-                for(int i = 0; i < 45; i+=1)
+                pose = "Head";
+                for (int i = 0; i < 45; i+=1)
                 {
                     head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, 1);
                     yield return new WaitForSeconds(0.1f);
                 }
+                pose = "Body";
                 for(int i = 0; i < 20; i++)
                 {
                     body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, 1);
@@ -521,28 +523,58 @@ public class GameManager : MonoBehaviour
                 }
                 state = null;
                 mode = null;
+                pose = null;
                 StopCoroutine(PoseStaying("Chair"));
                 break;
             case ("ModifiedChair"):
+                pose = "Head";
                 for (int i = 0; i < 45; i += 1)
                 {
                     head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, 1);
                     yield return new WaitForSeconds(0.1f);
                 }
+                pose = "Body";
                 for (int i = 0; i < 20; i++)
                 {
                     body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, 1);
                     legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, 2);
                     yield return new WaitForSeconds(0.1f);
                 }
-                for(int i = 0; i < 10; i++)
+                pose = "Spine";
+                for (int i = 0; i < 10; i++)
                 {
                     spine.transform.Rotate(Vector3.forward, 1);
                     yield return new WaitForSeconds(0.1f);
                 }
                 state = null;
                 mode = null;
+                pose = null;
                 StopCoroutine(PoseStaying("ModifiedChair"));
+                break;
+            case ("Dinner"):
+                pose = "Head";
+                for (int i = 0; i < 45; i += 1)
+                {
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, 1);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                
+                state = null;
+                mode = null;
+                pose = null;
+                StopCoroutine(PoseStaying("Dinner"));
+                break;
+            case ("Verticalize"):
+                pose = "Spine";
+                for (int i = 0; i < 15; i++)
+                {
+                    spine.transform.Rotate(Vector3.back, 1);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                state = null;
+                mode = null;
+                pose = null;
+                StopCoroutine(PoseStaying("Verticalize"));
                 break;
         }
     }

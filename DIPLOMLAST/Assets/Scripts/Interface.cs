@@ -28,6 +28,7 @@ public class Interface : MonoBehaviour
     public GameObject InputTimeDate;
     public Text[] timedateinputs = new Text[6];
     public Button[] OptionButtons = new Button[3];
+    public Slider RotationSpeed;
     void Start()
     {
         Calibrate(InfoOptionsPanel, Screen.width, Screen.height / 8, 0, -Screen.height / 16);
@@ -79,15 +80,15 @@ public class Interface : MonoBehaviour
         anglemaximum();
         if (Input.GetKey(KeyCode.Z))
         {
-            PoseWavePanel.transform.Translate(Vector3.left * 150 * Time.deltaTime);
+            PoseWavePanel.transform.Translate(Vector3.left * 250 * Time.deltaTime);
         }
         else if (Input.GetKey(KeyCode.X))
         {
-            PoseWavePanel.transform.Translate(Vector3.right * 150 * Time.deltaTime);
+            PoseWavePanel.transform.Translate(Vector3.right * 250 * Time.deltaTime);
         }
 
         PoseWavePanel.transform.localPosition = new Vector3(Mathf.Clamp(PoseWavePanel.transform.localPosition.x, -Screen.width * 0.75f, Screen.width * 0.75f), PoseWavePanel.transform.localPosition.y, PoseWavePanel.transform.localPosition.z);
-       
+        gm.rotationspeed = RotationSpeed.value * 10;
     }
     public void Calibrate(GameObject objectforcalib, float width,float height,float posx,float posy)
     {
@@ -403,6 +404,8 @@ public class Interface : MonoBehaviour
                 {
                     option.GetComponent<Button>().interactable = false;
                 }
+                gm.up = false;
+                gm.down = false;
             }
             else if(gm.state != "Calibrating")
             {
@@ -532,7 +535,7 @@ public class Interface : MonoBehaviour
                 {
                     endpoint = touch.position;
                     touchdirection = (endpoint - beginpoint).normalized;
-                    PoseWavePanel.transform.Translate(new Vector3(touchdirection.x, 0, 0) * 10 * Time.deltaTime);
+                    PoseWavePanel.transform.Translate(new Vector3(touchdirection.x, 0, 0) * 250 * Time.deltaTime);
 
                 }
 
