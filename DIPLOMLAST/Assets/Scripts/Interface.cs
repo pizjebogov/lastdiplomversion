@@ -29,6 +29,7 @@ public class Interface : MonoBehaviour
     public Text[] timedateinputs = new Text[6];
     public Button[] OptionButtons = new Button[3];
     public Slider RotationSpeed;
+    public Text[] serverneeded = new Text[3];
     void Start()
     {
         Calibrate(InfoOptionsPanel, Screen.width, Screen.height / 8, 0, -Screen.height / 16);
@@ -646,5 +647,13 @@ public class Interface : MonoBehaviour
     {
         dt = new DateTime(Convert.ToInt32(timedateinputs[2].text), Convert.ToInt32(timedateinputs[1].text), Convert.ToInt32(timedateinputs[0].text), Convert.ToInt32(timedateinputs[3].text), Convert.ToInt32(timedateinputs[4].text), Convert.ToInt32(timedateinputs[5].text));
         TimeSettedManually = true;
+    }
+    public void connecting()
+    {
+        gm.ip = serverneeded[0].text;
+        gm.port =  serverneeded[1].text;
+        gm.id = serverneeded[2].text ;
+        gm.connectedtoserver = true;
+
     }
 }

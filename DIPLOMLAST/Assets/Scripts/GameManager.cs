@@ -53,12 +53,11 @@ public class GameManager : MonoBehaviour
         {
             up = false;
             down = false;
+            StartCoroutine(Sendinfo(anglechanging("ended")));
+            StopCoroutine(Sendinfo(anglechanging("ended")));
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine(PoseStaying("Chair"));
-        }
+        
         
 
     }
@@ -161,11 +160,15 @@ public class GameManager : MonoBehaviour
         {
             up = true;
             down = false;
+            StartCoroutine(Sendinfo(anglechanging("started")));
+            StopCoroutine(Sendinfo(anglechanging("started")));
         }
         else if (upordown == "Down")
         {
             up = false;
             down = true;
+            StartCoroutine(Sendinfo(anglechanging("started")));
+            StopCoroutine(Sendinfo(anglechanging("started")));
         }
     }
 
@@ -237,6 +240,8 @@ public class GameManager : MonoBehaviour
 
     public void goingtoangle(float angle)
     {
+        StartCoroutine(Sendinfo(anglechanging("started") + " to" + angle + " degrees"));
+        StopCoroutine(Sendinfo(anglechanging("started") + " to" + angle + " degrees"));
         switch (mode)
         {
             case ("HeadMode"):
@@ -685,6 +690,28 @@ public class GameManager : MonoBehaviour
             WWW www = new WWW(URL, form);
             yield return www;
             Debug.Log("Server answer:" + www.text);
+        }
+    }
+
+    public string anglechanging(string upordown)
+    {
+        switch (mode)
+        {
+            case ("HeadMode"):
+                return "Head " + upordown + " moving at " + localheadangle + " degrees";
+                
+            case ("BodyMode"):
+                return "Body " + upordown + " moving at " + localbodyangle + " degrees";
+                
+            case ("LegMode"):
+                return "Legs " + upordown + " moving at " + (localbodyangle-locallegangle) + " degrees";
+                
+            case ("SpineMode"):
+                return "Spine " + upordown + " moving at " + spineangle + " degrees";
+            default:
+                return null;
+                
+
         }
     }
 }
