@@ -590,6 +590,7 @@ public class GameManager : MonoBehaviour
         {
             if(wavecount<=200 && wavecount > 170)
             {
+                pose = "Head";
                 head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed / 20);
                 wavecount -= rotationspeed / 20;
             }
@@ -599,12 +600,14 @@ public class GameManager : MonoBehaviour
             }
             else if(wavecount<=160 && wavecount > 130)
             {
+                pose = "Body";
                 body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed / 20);
                 legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed / 10);
                 wavecount -= rotationspeed / 20;
             }
             else if (wavecount <= 130 && wavecount > 110)
             {
+                pose = "Legs";
                 legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed / 20);
                 wavecount -= rotationspeed / 50;
             }
@@ -614,27 +617,32 @@ public class GameManager : MonoBehaviour
             }
             else if(wavecount<=100 && wavecount > 90)
             {
+                pose = "Spine";
                 spine.transform.Rotate(Vector3.back, rotationspeed / 20);
                 wavecount -= rotationspeed / 20;
             }
             else if(wavecount<=90 && wavecount > 60)
             {
+                pose = "Head";
                 head.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, rotationspeed / 20);
                 wavecount -= rotationspeed / 20;
             }
             else if (wavecount <= 60 && wavecount > 40)
             {
+                pose = "Legs";
                 legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, rotationspeed / 20);
                 wavecount -= rotationspeed / 50;
             }
             else if (wavecount <= 40 && wavecount > 10)
             {
+                pose = "Body";
                 body.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, rotationspeed / 20);
                 legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.forward, rotationspeed / 10);
                 wavecount -= rotationspeed / 20;
             }
             else if (wavecount <= 10 && wavecount > 0)
             {
+                pose = "Spine";
                 spine.transform.Rotate(Vector3.forward, rotationspeed / 20);
                 wavecount -= rotationspeed / 20;
             }
@@ -671,9 +679,9 @@ public class GameManager : MonoBehaviour
         {
             string URL = "http://" + ip + ":" + port;
             WWWForm form = new WWWForm();
-            form.AddField("ID", id);
-            form.AddField("Time", Time.time.ToString());
-            form.AddField("Information", neededinformation);
+            form.AddField("id", id);
+            form.AddField("time", Time.time.ToString());
+            form.AddField("info", neededinformation);
             WWW www = new WWW(URL, form);
             yield return www;
             Debug.Log("Server answer:" + www.text);
