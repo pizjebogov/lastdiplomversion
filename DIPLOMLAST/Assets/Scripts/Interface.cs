@@ -567,7 +567,11 @@ public class Interface : MonoBehaviour
             {
                 mode.interactable = false;
             }
-            gm.mode = null; 
+            gm.mode = null;
+            foreach (Button option in OptionButtons)
+            {
+                option.GetComponent<Button>().interactable = false;
+            }
         }
         else if(gm.state=="Chair"|| gm.state == "ModifiedChair" || gm.state == "Dinner" || gm.state == "Verticalize" || gm.state == "AntiModifiedChair")
         {
