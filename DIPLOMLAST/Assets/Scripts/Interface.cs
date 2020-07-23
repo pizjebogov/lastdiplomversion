@@ -545,7 +545,7 @@ public class Interface : MonoBehaviour
                 {
                     endpoint = touch.position;
                     touchdirection = (endpoint - beginpoint).normalized;
-                    PoseWavePanel.transform.Translate(new Vector3(touchdirection.x, 0, 0) * 250 * Time.deltaTime);
+                    PoseWavePanel.transform.Translate(new Vector3(touchdirection.x, 0, 0) * 1000 * Time.deltaTime);
 
                 }
 
