@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject head, body, legs, spine,upperpart;
     public string mode, state, pose;
     /*
-     mode: HeadMode,BodyMode,LegMode, SpineMode, GoingZeroMode,ProgramWave  mb ChairPose,ChairModifiedPose,DinnerPose,Verticalize, Mode5
+     mode: HeadMode,BodyMode,LegMode, SpineMode, GoingZeroMode,ProgramWave  mb ChairPose,ChairModifiedPose,DinnerPose,Verticalize, AntiModifiedChair
      state: Calibrating,Options,Quit,SwitchingPose
      pose: Head,Body,Leg,Spine
      */
@@ -490,7 +490,7 @@ public class GameManager : MonoBehaviour
 #endif
                 Application.Quit();
             }
-            else if(state=="Chair"|| state == "ModifiedChair" || state == "Dinner" || state == "Verticalize" || state == "Mode5")
+            else if(state=="Chair"|| state == "ModifiedChair" || state == "Dinner" || state == "Verticalize" || state == "AntiModifiedChair")
             {
                 pose = null;
                 StartCoroutine(PoseStaying(state));
@@ -548,7 +548,7 @@ public class GameManager : MonoBehaviour
                 pose = "Spine";
                 for (int i = 0; i < 10; i++)
                 {
-                    spine.transform.Rotate(Vector3.forward, 1);
+                    spine.transform.Rotate(Vector3.back, 1);
                     yield return new WaitForSeconds(0.1f);
                 }
                 state = null;
@@ -573,13 +573,38 @@ public class GameManager : MonoBehaviour
                 pose = "Spine";
                 for (int i = 0; i < 15; i++)
                 {
-                    spine.transform.Rotate(Vector3.back, 1);
+                    spine.transform.Rotate(Vector3.forward, 1);
                     yield return new WaitForSeconds(0.1f);
                 }
                 state = null;
                 mode = null;
                 pose = null;
                 StopCoroutine(PoseStaying("Verticalize"));
+                break;
+            case ("AntiModifiedChair"):
+                pose = "Head";
+                for (int i = 0; i < 45; i += 1)
+                {
+                    head.transform.RotateAround(anchorheadbody.transform.position, Vector3.back, 1);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                pose = "Body";
+                for (int i = 0; i < 20; i++)
+                {
+                    body.transform.RotateAround(anchorheadbody.transform.position, Vector3.forward, 1);
+                    legs.transform.RotateAround(anchorbodylegs.transform.position, Vector3.back, 2);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                pose = "Spine";
+                for (int i = 0; i < 10; i++)
+                {
+                    spine.transform.Rotate(Vector3.forward, 1);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                state = null;
+                mode = null;
+                pose = null;
+                StopCoroutine(PoseStaying("ModifiedChair"));
                 break;
         }
     }

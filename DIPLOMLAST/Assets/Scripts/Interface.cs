@@ -405,6 +405,10 @@ public class Interface : MonoBehaviour
                 {
                     option.GetComponent<Button>().interactable = false;
                 }
+                foreach(GameObject angle in anglebuttons)
+                {
+                    angle.GetComponent<Button>().interactable = false;
+                }
                 gm.up = false;
                 gm.down = false;
             }
@@ -421,6 +425,11 @@ public class Interface : MonoBehaviour
                 {
                     option.GetComponent<Button>().interactable = true;
                 }
+                foreach (GameObject angle in anglebuttons)
+                {
+                    angle.GetComponent<Button>().interactable = true;
+                }
+
             }
         }
         else if (gm.mode == "GoingZeroMode" || gm.mode == "ProgramWave")
@@ -488,7 +497,7 @@ public class Interface : MonoBehaviour
             anglepanel.SetActive(false);
             MotionPanel.SetActive(false);
             StartStopPanel.SetActive(false);
-            if (gm.state != "Quit" && gm.state != "SwitchingPose" && gm.state != "Options" && gm.state != "Chair" && gm.state != "ModifiedChair" && gm.state != "Dinner" && gm.state != "Verticalize" && gm.state != "Mode5")
+            if (gm.state != "Quit" && gm.state != "SwitchingPose" && gm.state != "Options" && gm.state != "Chair" && gm.state != "ModifiedChair" && gm.state != "Dinner" && gm.state != "Verticalize" && gm.state != "AntiModifiedChair")
             {
                 foreach (Button mode in ModeButtons)
                 {
@@ -560,7 +569,7 @@ public class Interface : MonoBehaviour
             }
             gm.mode = null; 
         }
-        else if(gm.state=="Chair"|| gm.state == "ModifiedChair" || gm.state == "Dinner" || gm.state == "Verticalize" || gm.state == "Mode5")
+        else if(gm.state=="Chair"|| gm.state == "ModifiedChair" || gm.state == "Dinner" || gm.state == "Verticalize" || gm.state == "AntiModifiedChair")
         {
             text.text = "Calibrating to " + gm.state + " position";
             gm.mode = null;
