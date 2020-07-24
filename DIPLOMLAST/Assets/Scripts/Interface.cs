@@ -30,6 +30,7 @@ public class Interface : MonoBehaviour
     public Button[] OptionButtons = new Button[3];
     public Slider RotationSpeed;
     public Text[] serverneeded = new Text[3];
+    public Image percantage;
     void Start()
     {
         Calibrate(InfoOptionsPanel, Screen.width, Screen.height / 8, 0, -Screen.height / 16);
@@ -150,7 +151,7 @@ public class Interface : MonoBehaviour
                 gm.legs.GetComponent<Renderer>().material = normal;
                 gm.spine.GetComponent<Renderer>().material = normal;
             }
-            else if (gm.pose == "Leg")
+            else if (gm.pose == "Legs")
             {
                 gm.head.GetComponent<Renderer>().material = normal;
                 gm.body.GetComponent<Renderer>().material = normal;
@@ -476,6 +477,14 @@ public class Interface : MonoBehaviour
                 {
                     option.GetComponent<Button>().interactable = false;
                 }
+                if (gm.mode == "GoingZeroMode")
+                {
+                    percantage.fillAmount = (gm.percentage - (gm.ZeroAngles[0] + gm.ZeroAngles[1] + gm.ZeroAngles[2] + gm.ZeroAngles[3])) / gm.percentage;
+                }
+                else
+                {
+                    percantage.fillAmount = (200 - gm.wavecount) / 200;
+                }
             }
             else if (gm.state != "Calibrating")
             {
@@ -489,7 +498,7 @@ public class Interface : MonoBehaviour
                 {
                     option.GetComponent<Button>().interactable = true;
                 }
-
+                percantage.fillAmount = 0;
             }
         }
         else {
@@ -520,6 +529,13 @@ public class Interface : MonoBehaviour
             PoseWavePanel.SetActive(false);
             modepanel.SetActive(false);
             
+        }
+        else if (gm.state == "Information")
+        {
+            text.text = "Information";
+            AllOptions.SetActive(false);
+            PoseWavePanel.SetActive(false);
+            modepanel.SetActive(false);
         }
         else if (gm.state == "SwitchingPose")
         {
